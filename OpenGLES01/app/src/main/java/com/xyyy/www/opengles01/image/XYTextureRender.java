@@ -31,16 +31,16 @@ public class XYTextureRender implements XYEGLSurfaceView.XYGLRender {
     };
 
     private float[] fragmentData = {
-//            0f, 1f,
-//            1f, 1f,
-//            0f, 0f,
-//            1f, 0f
-
-            //离屏渲染 FBO坐标系不一致 需要用这个
-            0f, 0f,
-            1f, 0f,
             0f, 1f,
-            1f, 1f
+            1f, 1f,
+            0f, 0f,
+            1f, 0f
+
+            //离屏渲染 FBO坐标系不一致 所以需要用这个
+//            0f, 0f,
+//            1f, 0f,
+//            0f, 1f,
+//            1f, 1f
 
     };
 
@@ -160,8 +160,8 @@ public class XYTextureRender implements XYEGLSurfaceView.XYGLRender {
     public void onDrawFrame() {
 
 
-//        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);//0的话就是不使用离屏渲染
-        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, fboId);//这里绑定之后 后面的操作不会显示到窗口上面
+        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);//0的话就是不使用离屏渲染
+//        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, fboId);//这里绑定之后 后面的操作不会显示到窗口上面
 
 
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
@@ -187,9 +187,9 @@ public class XYTextureRender implements XYEGLSurfaceView.XYGLRender {
 
         //解绑
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
-
-        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);//解绑
-        fboRender.onDraw(textureid);
+//
+//        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);//解绑
+//        fboRender.onDraw(textureid);
     }
 
     //生成一个纹理
