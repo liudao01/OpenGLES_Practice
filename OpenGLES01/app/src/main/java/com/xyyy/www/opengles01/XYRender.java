@@ -29,7 +29,7 @@ public class XYRender implements XYEGLSurfaceView.XYGLRender{
 
     @Override
     public void onDrawFrame() {
-//        Log.d(TAG, "onDrawFrame: \"ondrawFrame\"");
+        //Log.d(TAG, "onDrawFrame: \"ondrawFrame\"");
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
         GLES20.glClearColor(0.0f, 1.0f, 1.0f, 1.0f);
     }
