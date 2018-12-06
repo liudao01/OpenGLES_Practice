@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
+import android.opengl.Matrix;
 
 import com.xyyy.www.opengles01.LogUtil;
 import com.xyyy.www.opengles01.R;
@@ -60,6 +61,9 @@ public class XYTextureRender implements XYEGLSurfaceView.XYGLRender {
 
     private FboRender fboRender;
 
+    private int umatrix;
+    private float[] matrix = new float[16];
+
     public XYTextureRender(Context context) {
         this.context = context;
         fboRender = new FboRender(context);
@@ -82,7 +86,7 @@ public class XYTextureRender implements XYEGLSurfaceView.XYGLRender {
 
         fboRender.onCreate();
 
-        String vertexSource = XYShaderUtil.getRawResource(context, R.raw.img_vertex_shader);
+        String vertexSource = XYShaderUtil.getRawResource(context, R.raw.img_vertex_shader_m);
         String fragmentSource = XYShaderUtil.getRawResource(context, R.raw.img_fragment_shader);
 
         program = XYShaderUtil.createProgram(vertexSource, fragmentSource);
@@ -90,6 +94,7 @@ public class XYTextureRender implements XYEGLSurfaceView.XYGLRender {
         vPosition = GLES20.glGetAttribLocation(program, "v_Position");
         fPosition = GLES20.glGetAttribLocation(program, "f_Position");
         sampler = GLES20.glGetUniformLocation(program, "sTexture");
+        umatrix = GLES20.glGetUniformLocation(program, "u_Matrix");
 
         int[] vbos = new int[1];
 //        1、创建VBO
@@ -107,8 +112,6 @@ public class XYTextureRender implements XYEGLSurfaceView.XYGLRender {
         GLES20.glBufferSubData(GLES20.GL_ARRAY_BUFFER, vertexData.length * 4, fragmentData.length * 4, fragmentBuffer);
 //        5、解绑VBO
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
-
-
 
 
         //FBO
@@ -154,6 +157,17 @@ public class XYTextureRender implements XYEGLSurfaceView.XYGLRender {
     public void onSurfaceChanged(int width, int height) {
         GLES20.glViewport(0, 0, width, height);
         fboRender.onChange(width, height);
+
+        //横屏 宽大越高
+        if (width > height) {
+            //left 实际的高 除以 图片的高 得到比例 拉伸了多少作用于宽上面 再乘以图片的高度 求出实际下面绘制的宽度 最后 用宽除实际的宽度求出比例    因为是-1到1之间  left 是负的 right是正的
+            Matrix.orthoM(matrix, 0, -width / ((height / 1920f)*1080f), width / ((height / 1920f)*1080f), -1f, 1f, -1f, 1f);
+
+        } else {//竖屏 宽小于高
+
+        }
+
+
     }
 
     @Override
@@ -169,6 +183,7 @@ public class XYTextureRender implements XYEGLSurfaceView.XYGLRender {
 
         GLES20.glUseProgram(program);
 
+        GLES20.glUniformMatrix4fv(umatrix, 1, false, matrix, 0);//使用正交投影 矩阵matrix
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, imageTextureId);//使用imageTexture
 
         //绑定vbo
