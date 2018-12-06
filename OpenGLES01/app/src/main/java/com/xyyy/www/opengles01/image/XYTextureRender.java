@@ -167,6 +167,9 @@ public class XYTextureRender implements XYEGLSurfaceView.XYGLRender {
             Matrix.orthoM(matrix, 0, -1, 1, -height / ((width / 1080f)*1920f), height / ((width / 1080f)*1920f), -1f, 1f);
         }
 
+        //旋转
+        Matrix.rotateM(matrix,0,180,1,0,0);
+
 
     }
 
