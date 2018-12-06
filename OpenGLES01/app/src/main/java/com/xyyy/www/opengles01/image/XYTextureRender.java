@@ -163,8 +163,8 @@ public class XYTextureRender implements XYEGLSurfaceView.XYGLRender {
             //left 实际的高 除以 图片的高 得到比例 拉伸了多少作用于宽上面 再乘以图片的高度 求出实际下面绘制的宽度 最后 用宽除实际的宽度求出比例    因为是-1到1之间  left 是负的 right是正的
             Matrix.orthoM(matrix, 0, -width / ((height / 1920f)*1080f), width / ((height / 1920f)*1080f), -1f, 1f, -1f, 1f);
 
-        } else {//竖屏 宽小于高
-
+        } else {//竖屏 宽小于高  把宽作为1
+            Matrix.orthoM(matrix, 0, -1, 1, -height / ((width / 1080f)*1920f), height / ((width / 1080f)*1920f), -1f, 1f);
         }
 
 
