@@ -137,7 +137,7 @@ public class XYTextureRender implements XYEGLSurfaceView.XYGLRender {
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
 
         GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_COLOR_ATTACHMENT0, GLES20.GL_TEXTURE_2D, textureid, 0);//把纹理绑定到FBO上
-        GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA, 1080, 1920, 0, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, null);
+        GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA, 1920, 1080, 0, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, null);
 
         if (GLES20.glCheckFramebufferStatus(GLES20.GL_FRAMEBUFFER) != GLES20.GL_FRAMEBUFFER_COMPLETE) {
             LogUtil.e("fbo wrong");
@@ -174,8 +174,8 @@ public class XYTextureRender implements XYEGLSurfaceView.XYGLRender {
     public void onDrawFrame() {
 
 
-        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);//0的话就是不使用离屏渲染
-//        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, fboId);//这里绑定之后 后面的操作不会显示到窗口上面
+//        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);//0的话就是不使用离屏渲染
+        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, fboId);//这里绑定之后 后面的操作不会显示到窗口上面
 
 
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
@@ -203,8 +203,8 @@ public class XYTextureRender implements XYEGLSurfaceView.XYGLRender {
         //解绑
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
 //
-//        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);//解绑
-//        fboRender.onDraw(textureid);
+        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);//解绑
+        fboRender.onDraw(textureid);
     }
 
     //生成一个纹理
