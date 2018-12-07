@@ -2,9 +2,11 @@ package com.xyyy.www.opengles01.surface;
 
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
+import android.opengl.GLUtils;
 
-import com.xyyy.www.opengles01.LogUtil;
 import com.xyyy.www.opengles01.R;
 import com.xyyy.www.opengles01.XYEGLSurfaceView;
 import com.xyyy.www.opengles01.image.XYShaderUtil;
@@ -22,7 +24,12 @@ public class XYMutiRender implements XYEGLSurfaceView.XYGLRender {
             -1f, -1f,
             1f, -1f,
             -1f, 1f,
-            1f, 1f
+            1f, 1f,
+            //三角形
+            -0.25f, -0.25f,
+            0.25f, -0.25f,
+            0f, 0.15f
+
     };
 
     private float[] fragmentData = {
@@ -41,6 +48,7 @@ public class XYMutiRender implements XYEGLSurfaceView.XYGLRender {
     private int fPosition;
     private int sampler;
     private int textureId;
+    private int imgTetureId;
     private int index;
     private String fragmentSource;
 
@@ -68,7 +76,9 @@ public class XYMutiRender implements XYEGLSurfaceView.XYGLRender {
     @Override
     public void onSurfaceCreated() {
         String vertexSource = XYShaderUtil.getRawResource(context, R.raw.img_vertex_shader);
-        LogUtil.d("打印 index = " + index);
+
+        imgTetureId = loadTexture(R.drawable.ghnl);
+//        LogUtil.d("打印 index = " + index);
         fragmentSource = XYShaderUtil.getRawResource(context, R.raw.fragment_shader1);
         switch (index) {
             case 0:
@@ -120,10 +130,12 @@ public class XYMutiRender implements XYEGLSurfaceView.XYGLRender {
 
         GLES20.glUseProgram(program);
 
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);//使用imageTexture
 
-        //绑定vbo
+        //先绑定vbo
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vboId);
+
+
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);//使用imageTexture
 
         GLES20.glEnableVertexAttribArray(vPosition);
         GLES20.glVertexAttribPointer(vPosition, 2, GLES20.GL_FLOAT, false, 8,
@@ -134,10 +146,48 @@ public class XYMutiRender implements XYEGLSurfaceView.XYGLRender {
                 vertexData.length * 4);
 
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
+
+        //第二次绘制
+
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);//使用imageTexture
+
+        GLES20.glEnableVertexAttribArray(vPosition);
+        GLES20.glVertexAttribPointer(vPosition, 2, GLES20.GL_FLOAT, false, 8,
+                32);
+
+        GLES20.glEnableVertexAttribArray(fPosition);
+        GLES20.glVertexAttribPointer(fPosition, 2, GLES20.GL_FLOAT, false, 8,
+                vertexData.length * 4);
+
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 3);//3个点
+
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
 
         //解绑
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
     }
+
+
+    //生成一个纹理
+    private int loadTexture(int src) {
+        int[] textureIds = new int[1];
+        GLES20.glGenTextures(1, textureIds, 0);
+
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureIds[0]);
+
+
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_REPEAT);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_REPEAT);
+
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
+
+        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), src);
+        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
+
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
+        return textureIds[0];
+    }
+
 
 }

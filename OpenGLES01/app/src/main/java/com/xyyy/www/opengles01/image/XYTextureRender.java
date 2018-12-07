@@ -28,7 +28,13 @@ public class XYTextureRender implements XYEGLSurfaceView.XYGLRender {
             -1f, -1f,
             1f, -1f,
             -1f, 1f,
-            1f, 1f
+            1f, 1f,
+
+
+            -0.5f,-0.5f,
+            0.5f,-0.5f,
+            -0.5f,0.5f,
+            0.5f,0.5f
     };
 
     private float[] fragmentData = {
@@ -58,6 +64,7 @@ public class XYTextureRender implements XYEGLSurfaceView.XYGLRender {
     private int fboId;
 
     private int imageTextureId;
+    private int imageTextureId2;
 
     private FboRender fboRender;
 
@@ -161,6 +168,7 @@ public class XYTextureRender implements XYEGLSurfaceView.XYGLRender {
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
 
         imageTextureId = loadTexture(R.drawable.androids);
+        imageTextureId2 = loadTexture(R.drawable.girl);
 //        imageTextureId = loadTexture(R.mipmap.test);
 
         if (onRenderCreateListener != null) {
@@ -199,6 +207,8 @@ public class XYTextureRender implements XYEGLSurfaceView.XYGLRender {
         //旋转
         Matrix.rotateM(matrix, 0, 180, 1, 0, 0);
 
+        //z 轴旋转180度
+//        Matrix.rotateM(matrix, 0, 180, 0, 0, 1);
 
     }
 
@@ -216,10 +226,12 @@ public class XYTextureRender implements XYEGLSurfaceView.XYGLRender {
         GLES20.glUseProgram(program);
 
         GLES20.glUniformMatrix4fv(umatrix, 1, false, matrix, 0);//使用正交投影 矩阵matrix
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, imageTextureId);//使用imageTexture
 
         //绑定vbo
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vboId);
+
+        //绘制第一张图片
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, imageTextureId);//使用imageTexture
 
         GLES20.glEnableVertexAttribArray(vPosition);
         GLES20.glVertexAttribPointer(vPosition, 2, GLES20.GL_FLOAT, false, 8,
@@ -229,7 +241,24 @@ public class XYTextureRender implements XYEGLSurfaceView.XYGLRender {
         GLES20.glVertexAttribPointer(fPosition, 2, GLES20.GL_FLOAT, false, 8,
                 vertexData.length * 4);
 
+        //绘制
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
+
+        //绘制第二张图片
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, imageTextureId2);//使用imageTexture
+
+        GLES20.glEnableVertexAttribArray(vPosition);
+        GLES20.glVertexAttribPointer(vPosition, 2, GLES20.GL_FLOAT, false, 8,
+                32);
+        //offset需要递增  一个float是4个字节,8个坐标 所以要移动4*8个字节,下一个坐标才是第二张
+
+        GLES20.glEnableVertexAttribArray(fPosition);
+        GLES20.glVertexAttribPointer(fPosition, 2, GLES20.GL_FLOAT, false, 8,
+                vertexData.length * 4);
+
+        //绘制
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
+
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
 
         //解绑
