@@ -64,6 +64,17 @@ public class XYTextureRender implements XYEGLSurfaceView.XYGLRender {
     private int umatrix;
     private float[] matrix = new float[16];
 
+    private int width;
+    private int height;
+
+    private int screenW = 1080;
+    private int screenH = 1920;
+
+    private float imgWidth = 526f;
+    private float imgHeight = 702f;
+
+    private OnRenderCreateListener onRenderCreateListener;
+
     public XYTextureRender(Context context) {
         this.context = context;
         fboRender = new FboRender(context);
@@ -137,7 +148,7 @@ public class XYTextureRender implements XYEGLSurfaceView.XYGLRender {
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
 
         GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_COLOR_ATTACHMENT0, GLES20.GL_TEXTURE_2D, textureid, 0);//把纹理绑定到FBO上
-        GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA, 1920, 1080, 0, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, null);
+        GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA, screenW, screenH, 0, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, null);
 
         if (GLES20.glCheckFramebufferStatus(GLES20.GL_FRAMEBUFFER) != GLES20.GL_FRAMEBUFFER_COMPLETE) {
             LogUtil.e("fbo wrong");
@@ -149,34 +160,52 @@ public class XYTextureRender implements XYEGLSurfaceView.XYGLRender {
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
 
-//        imageTextureId = loadTexture(R.drawable.androids);
-        imageTextureId = loadTexture(R.mipmap.test);
+        imageTextureId = loadTexture(R.drawable.androids);
+//        imageTextureId = loadTexture(R.mipmap.test);
+
+        if (onRenderCreateListener != null) {
+            onRenderCreateListener.onCreate(textureid);
+        }
+
+    }
+
+    public void setOnRenderCreateListener(OnRenderCreateListener onRenderCreateListener) {
+        this.onRenderCreateListener = onRenderCreateListener;
     }
 
     @Override
     public void onSurfaceChanged(int width, int height) {
-        GLES20.glViewport(0, 0, width, height);
-        fboRender.onChange(width, height);
+//        GLES20.glViewport(0, 0, width, height);
+//        fboRender.onChange(width, height);
+        //这里上面的width . height 是surface 的宽度 和高度
+
+        //记录外层的宽高
+        this.width = width;
+        this.height = height;
+
+        //这里是屏幕的宽高
+        width = screenW;
+        height = screenH;
 
         //横屏 宽大越高
         if (width > height) {
             //left 实际的高 除以 图片的高 得到比例 拉伸了多少作用于宽上面 再乘以图片的高度 求出实际下面绘制的宽度 最后 用宽除实际的宽度求出比例    因为是-1到1之间  left 是负的 right是正的
-            Matrix.orthoM(matrix, 0, -width / ((height / 1920f)*1080f), width / ((height / 1920f)*1080f), -1f, 1f, -1f, 1f);
+            Matrix.orthoM(matrix, 0, -width / ((height / imgHeight) * imgWidth), width / ((height / imgHeight) * imgWidth), -1f, 1f, -1f, 1f);
 
         } else {//竖屏 宽小于高  把宽作为1
-            Matrix.orthoM(matrix, 0, -1, 1, -height / ((width / 1080f)*1920f), height / ((width / 1080f)*1920f), -1f, 1f);
+            Matrix.orthoM(matrix, 0, -1, 1, -height / ((width / imgWidth) * imgHeight), height / ((width / imgWidth) * imgHeight), -1f, 1f);
         }
 
         //旋转
-        Matrix.rotateM(matrix,0,180,1,0,0);
+        Matrix.rotateM(matrix, 0, 180, 1, 0, 0);
 
 
     }
 
     @Override
     public void onDrawFrame() {
-
-
+//        按照实际的宽高
+        GLES20.glViewport(0, 0, screenW, screenH);//这里实际上就把图片绘制到离屏纹理上
 //        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);//0的话就是不使用离屏渲染
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, fboId);//这里绑定之后 后面的操作不会显示到窗口上面
 
@@ -205,7 +234,9 @@ public class XYTextureRender implements XYEGLSurfaceView.XYGLRender {
 
         //解绑
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
-//
+
+        //切换到屏幕后 重新设置渲染的宽高
+        GLES20.glViewport(0, 0, width, height);
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);//解绑
         fboRender.onDraw(textureid);
     }
@@ -229,5 +260,10 @@ public class XYTextureRender implements XYEGLSurfaceView.XYGLRender {
 
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
         return textureIds[0];
+    }
+
+    public interface OnRenderCreateListener {
+        //textid  离屏渲染的id
+        void onCreate(int textid);
     }
 }

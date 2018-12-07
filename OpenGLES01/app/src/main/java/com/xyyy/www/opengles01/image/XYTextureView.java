@@ -23,4 +23,6 @@ public class XYTextureView extends XYEGLSurfaceView {
         super(context, attrs, defStyleAttr);
         setRender(new XYTextureRender(context));
     }
+
+
 }

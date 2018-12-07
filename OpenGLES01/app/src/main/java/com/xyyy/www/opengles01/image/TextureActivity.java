@@ -8,7 +8,7 @@ import com.xyyy.www.opengles01.R;
 
 /**
  * @author liuml
- * @explain
+ * @explain  使用XYTextureView
  * @time 2018/12/3 17:21
  */
 public class TextureActivity extends AppCompatActivity {
