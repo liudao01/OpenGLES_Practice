@@ -39,10 +39,10 @@ public class SurfaceTextureActivity extends AppCompatActivity {
                             llContent.removeAllViews();
                         }
 
-                        for (int i = 0; i < 3; i++) {
+                        for (int i = 0; i <3; i++) {
 
                             XYMutiSurfaceView xyMutiSurfaceView = new XYMutiSurfaceView(SurfaceTextureActivity.this);
-                            xyMutiSurfaceView.setTextureId(textid);
+                            xyMutiSurfaceView.setTextureId(textid,i);
                             xyMutiSurfaceView.setSurfaceAndEglContext(null, xyglsurfaceview.getEglContext());
 
                             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);

@@ -4,6 +4,7 @@ package com.xyyy.www.opengles01.surface;
 import android.content.Context;
 import android.opengl.GLES20;
 
+import com.xyyy.www.opengles01.LogUtil;
 import com.xyyy.www.opengles01.R;
 import com.xyyy.www.opengles01.XYEGLSurfaceView;
 import com.xyyy.www.opengles01.image.XYShaderUtil;
@@ -40,10 +41,12 @@ public class XYMutiRender implements XYEGLSurfaceView.XYGLRender {
     private int fPosition;
     private int sampler;
     private int textureId;
+    private int index;
+    private String fragmentSource;
 
-
-    public void setTextureId(int textureId) {
+    public void setTextureId(int textureId, int index) {
         this.textureId = textureId;
+        this.index = index;
     }
 
     public XYMutiRender(Context context) {
@@ -65,7 +68,21 @@ public class XYMutiRender implements XYEGLSurfaceView.XYGLRender {
     @Override
     public void onSurfaceCreated() {
         String vertexSource = XYShaderUtil.getRawResource(context, R.raw.img_vertex_shader);
-        String fragmentSource = XYShaderUtil.getRawResource(context, R.raw.img_fragment_shader);
+        LogUtil.d("打印 index = " + index);
+        fragmentSource = XYShaderUtil.getRawResource(context, R.raw.fragment_shader1);
+        switch (index) {
+            case 0:
+                fragmentSource = XYShaderUtil.getRawResource(context, R.raw.fragment_shader1);
+                break;
+            case 1:
+                fragmentSource = XYShaderUtil.getRawResource(context, R.raw.fragment_shader2);
+                break;
+            case 2:
+                fragmentSource = XYShaderUtil.getRawResource(context, R.raw.fragment_shader3);
+//                fragmentSource = XYShaderUtil.getRawResource(context, R.raw.img_fragment_shader);
+                break;
+
+        }
 
         program = XYShaderUtil.createProgram(vertexSource, fragmentSource);
 

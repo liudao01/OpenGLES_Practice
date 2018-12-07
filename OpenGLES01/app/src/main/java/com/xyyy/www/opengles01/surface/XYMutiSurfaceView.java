@@ -3,6 +3,7 @@ package com.xyyy.www.opengles01.surface;
 import android.content.Context;
 import android.util.AttributeSet;
 
+import com.xyyy.www.opengles01.LogUtil;
 import com.xyyy.www.opengles01.XYEGLSurfaceView;
 
 /**
@@ -28,9 +29,10 @@ public class XYMutiSurfaceView extends XYEGLSurfaceView {
         setRender(xyMutiRender);
     }
 
-    public void setTextureId(int textureId) {
+    public void setTextureId(int textureId, int index) {
         if (xyMutiRender != null) {
-            xyMutiRender.setTextureId(textureId);
+            LogUtil.d("index = "+index);
+            xyMutiRender.setTextureId(textureId,index);
         }
     }
 
