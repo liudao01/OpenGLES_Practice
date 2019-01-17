@@ -10,7 +10,7 @@ import com.xyyy.www.opengles01.image.XYTextureRender;
 
 /**
  * @author liuml
- * @explain 多Surface渲染同一纹理
+ * @explain 多Surface渲染同一纹理  单一纹理渲染多surface
  * @time 2018/12/3 17:21
  */
 public class SurfaceTextureActivity extends AppCompatActivity {
