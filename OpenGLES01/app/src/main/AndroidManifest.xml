@@ -9,18 +9,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <!--<activity android:name=".surface.SurfaceTextureActivity">-->
-        <activity android:name=".anim.OpenGLAnimActivity">
-        <!--<activity android:name=".image.TextureActivity">-->
-        <!--<activity android:name=".EglSurfaceActivity">-->
-        <!--<activity android:name=".MainActivity">-->
+
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--<activity android:name=".EglSurfaceActivity"></activity>-->
+        <activity android:name=".surface.SurfaceTextureActivity"></activity>
+        <activity android:name=".anim.OpenGLAnimActivity"></activity>
+        <activity android:name=".image.TextureActivity"></activity>
+        <activity android:name=".EglSurfaceActivity"></activity>
+        <activity android:name=".SampleOpenGLActivity"></activity>
     </application>
 
 </manifest>

@@ -1,14 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <SurfaceView
-        android:id="@+id/surfaceView"
+    <Button
+        android:id="@+id/bt_sample"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:text="简单的使用opengl- eglHelper渲染" />
 
-</android.support.constraint.ConstraintLayout>
+    <Button
+        android:id="@+id/bt_xyglsurfaceview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="EglSurfaceActivity 基本使用  EglSurface渲染" />
+
+    <Button
+        android:id="@+id/bt_3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="多Surface渲染同一纹理 " />
+
+    <Button
+        android:id="@+id/bt_anim"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="OpenGLAnimActivity 动画" />
+
+</LinearLayout>

@@ -1,15 +1,22 @@
 package com.xyyy.www.opengles01;
 
-import android.opengl.GLES20;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
+import android.view.View;
+import android.widget.Button;
 
-public class MainActivity extends AppCompatActivity {
+import com.xyyy.www.opengles01.anim.OpenGLAnimActivity;
+import com.xyyy.www.opengles01.image.TextureActivity;
+import com.xyyy.www.opengles01.surface.SurfaceTextureActivity;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
 
-    private SurfaceView surfaceView;
+    private Button btSample;
+    private Button btXyglsurfaceview;
+    private Button bt3;
+    private Button btAnim;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,45 +26,40 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        surfaceView = findViewById(R.id.surfaceView);
-        surfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
-            @Override
-            public void surfaceCreated(SurfaceHolder holder) {
+        btSample = findViewById(R.id.bt_sample);
+        btXyglsurfaceview = findViewById(R.id.bt_xyglsurfaceview);
+        bt3 = findViewById(R.id.bt_3);
+        btAnim = findViewById(R.id.bt_anim);
 
-            }
+        btSample.setOnClickListener(this);
+        btXyglsurfaceview.setOnClickListener(this);
+        bt3.setOnClickListener(this);
+        btAnim.setOnClickListener(this);
+    }
 
-            @Override
-            public void surfaceChanged(final SurfaceHolder holder, int format, final int width, final int height) {
-                new Thread() {
-                    @Override
-                    public void run() {
-                        super.run();
-                        EglHelper eglHelper = new EglHelper();
-                        eglHelper.initEgl(holder.getSurface(), null);
+    @Override
+    public void onClick(View v) {
+        Intent intent = null;
+        switch (v.getId()) {
+            case R.id.bt_sample:
+                intent = new Intent(this, SampleOpenGLActivity.class);
+                break;
+            case R.id.bt_xyglsurfaceview:
+                intent = new Intent(this, TextureActivity.class);
 
-                        while (true) {
-                            GLES20.glViewport(0, 0, width, height);
-                            GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
-                            GLES20.glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
+                break;
+            case R.id.bt_3:
+                intent = new Intent(this, SurfaceTextureActivity.class);
 
-                            eglHelper.swapBuffers();
+                break;
+            case R.id.bt_anim:
+                intent = new Intent(this, OpenGLAnimActivity.class);
 
+                break;
 
-                            try {
-                                Thread.sleep(16);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                    }
-                }.start();
-            }
-
-            @Override
-            public void surfaceDestroyed(SurfaceHolder holder) {
-
-            }
-        });
+        }
+        if (intent != null) {
+            startActivity(intent);
+        }
     }
 }

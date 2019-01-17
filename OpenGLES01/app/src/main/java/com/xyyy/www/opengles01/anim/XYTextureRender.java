@@ -104,24 +104,6 @@ public class XYTextureRender implements XYEGLSurfaceView.XYGLRender {
         fragmentBuffer.position(0);
 
     }
-    public XYTextureRender(Context context,int textureId) {
-        this.context = context;
-        this.textureId = textureId;
-
-        fboRender = new FboRender(context);
-        vertexBuffer = ByteBuffer.allocateDirect(vertexData.length * 4)
-                .order(ByteOrder.nativeOrder())
-                .asFloatBuffer()
-                .put(vertexData);
-        vertexBuffer.position(0);
-
-        fragmentBuffer = ByteBuffer.allocateDirect(fragmentData.length * 4)
-                .order(ByteOrder.nativeOrder())
-                .asFloatBuffer()
-                .put(fragmentData);
-        fragmentBuffer.position(0);
-
-    }
 
     @Override
     public void onSurfaceCreated() {
