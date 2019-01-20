@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button btXyglsurfaceview;
     private Button bt3;
     private Button btAnim;
+    private Button btImageAbstruct;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btXyglsurfaceview.setOnClickListener(this);
         bt3.setOnClickListener(this);
         btAnim.setOnClickListener(this);
+        btImageAbstruct = findViewById(R.id.bt_image_abstruct);
+        btImageAbstruct.setOnClickListener(this);
     }
 
     @Override
@@ -54,7 +57,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.bt_anim:
                 intent = new Intent(this, OpenGLAnimActivity.class);
-
+                break;
+            case R.id.bt_image_abstruct:
+                intent = new Intent(this, OpenGLAnimActivity.class);
                 break;
 
         }
