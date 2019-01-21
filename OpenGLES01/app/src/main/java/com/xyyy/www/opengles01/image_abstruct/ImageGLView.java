@@ -14,6 +14,7 @@ public class ImageGLView extends GLSurfaceView {
     // 记录当前滤镜数据
     private String mResourceData;
     ImageFilterRender render;
+
     public ImageGLView(Context context) {
         this(context, null);
     }
@@ -32,8 +33,27 @@ public class ImageGLView extends GLSurfaceView {
         queueEvent(new Runnable() {
             @Override
             public void run() {
-
+                //创建滤镜
+                createColorFilter(mResourceData);
+                onFilterSizeChanged();
+                requestRender();
             }
         });
+    }
+
+    /**
+     * 滤镜大小发生变化
+     */
+    private void onFilterSizeChanged() {
+
+    }
+
+    /**
+     * 创建滤镜
+     *
+     * @param mResourceData
+     */
+    private void createColorFilter(String mResourceData) {
+
     }
 }
