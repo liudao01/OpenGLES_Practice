@@ -30,5 +30,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="OpenGLAnimActivity 动画" />
-
+    <Button
+        android:id="@+id/bt_image_abstruct"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="基类抽取 显示图片" />
 </LinearLayout>
