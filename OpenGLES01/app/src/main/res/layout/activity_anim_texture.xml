@@ -6,14 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <com.xyyy.www.opengles01.image.XYTextureView
+    <com.xyyy.www.opengles01.anim.XYTextureView
         android:id="@+id/xyglsurfaceview"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
     <Button
         android:id="@+id/bt_startimg"
-
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 </android.support.constraint.ConstraintLayout>

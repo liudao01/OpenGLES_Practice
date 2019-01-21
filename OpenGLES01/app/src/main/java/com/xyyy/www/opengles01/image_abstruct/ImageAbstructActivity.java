@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.xyyy.www.opengles01.R;
 
 /**
- * 显示GLsurfact 抽取基类
+ * 显示GLsurface  抽取基类 使用
  */
 public class ImageAbstructActivity extends AppCompatActivity {
 

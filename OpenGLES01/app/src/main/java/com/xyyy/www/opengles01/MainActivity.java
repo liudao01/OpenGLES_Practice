@@ -8,6 +8,7 @@ import android.widget.Button;
 
 import com.xyyy.www.opengles01.anim.OpenGLAnimActivity;
 import com.xyyy.www.opengles01.image.TextureActivity;
+import com.xyyy.www.opengles01.image_abstruct.ImageAbstructActivity;
 import com.xyyy.www.opengles01.surface.SurfaceTextureActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -59,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 intent = new Intent(this, OpenGLAnimActivity.class);
                 break;
             case R.id.bt_image_abstruct:
-                intent = new Intent(this, OpenGLAnimActivity.class);
+                intent = new Intent(this, ImageAbstructActivity.class);
                 break;
 
         }
