@@ -7,6 +7,8 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLUtils;
 
+import com.xyyy.www.opengles01.R;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -28,7 +30,8 @@ public class ImageFilterRender implements GLSurfaceView.Renderer {
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         baseFilter.onCreate();
         //设置图片的纹理id
-//        loadTexture(R.drawable.img_1);
+        int textureid = loadTexture(R.drawable.androids);
+        baseFilter.setTextureId(textureid);
 
 
     }
@@ -42,6 +45,8 @@ public class ImageFilterRender implements GLSurfaceView.Renderer {
     public void onDrawFrame(GL10 gl) {
         baseFilter.draw();
     }
+
+
 
     private int loadTexture(int src) {
         //创建纹理

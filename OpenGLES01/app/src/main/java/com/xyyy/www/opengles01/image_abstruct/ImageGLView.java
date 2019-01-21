@@ -11,6 +11,8 @@ import android.util.AttributeSet;
  */
 public class ImageGLView extends GLSurfaceView {
 
+    // 记录当前滤镜数据
+    private String mResourceData;
     ImageFilterRender render;
     public ImageGLView(Context context) {
         this(context, null);
@@ -22,5 +24,16 @@ public class ImageGLView extends GLSurfaceView {
         render = new ImageFilterRender(getContext());
         setRenderer(render);
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+    }
+
+
+    public void setFilter(String resourceData) {
+        mResourceData = resourceData;
+        queueEvent(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        });
     }
 }

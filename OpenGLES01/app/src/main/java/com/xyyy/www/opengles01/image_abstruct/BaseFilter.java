@@ -1,10 +1,7 @@
 package com.xyyy.www.opengles01.image_abstruct;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
-import android.opengl.GLUtils;
 
 import com.xyyy.www.opengles01.LogUtil;
 import com.xyyy.www.opengles01.R;
@@ -45,7 +42,7 @@ public class BaseFilter {
 
     private int vPosition;//顶点坐标句柄
     private int fPosition;//纹理坐标句柄
-    private int sampler;//默认纹理贴图句柄
+
 
     private int textureType = 0;//模式使用Texture2D0
     private int textureId = 0;//纹理的id
@@ -95,7 +92,7 @@ public class BaseFilter {
         vertexSource = XYShaderUtil.getRawResource(context, R.raw.base_img_vertex_shader);
         fragmentSource = XYShaderUtil.getRawResource(context, R.raw.base_img_fragment_shader);
 
-        textureId = loadTexture(R.drawable.androids);
+//        textureId = loadTexture(R.drawable.androids);
     }
 
     public void setSize(int width, int height) {
@@ -235,6 +232,8 @@ public class BaseFilter {
      * 绑定纹理
      */
     protected void onBindTexture() {
+        //纹理单元的主要目的是让我们在着色器中可以使用多于一个的纹理。
+        // 通过把纹理单元赋值给采样器，我们可以一次绑定多个纹理，只要我们首先激活对应的纹理单元。
         // 在绑定纹理之前先激活纹理单元
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0 + textureType);
         //绑定纹理
@@ -252,31 +251,4 @@ public class BaseFilter {
         return textureId;
     }
 
-    private int loadTexture(int src) {
-        //创建纹理
-        int[] textureIds = new int[1];
-        GLES20.glGenTextures(1, textureIds, 0);
-
-        int textureId = textureIds[0];
-
-        //绑定
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureIds[0]);
-
-        //设置参数 环绕（超出纹理坐标范围）：
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_REPEAT);
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_REPEAT);
-
-        //过滤（纹理像素映射到坐标点
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
-
-        //图片内容
-        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), src);
-        if (bitmap == null) {
-            return 0;
-        }
-        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
-        bitmap.recycle();
-        return textureId;
-    }
 }
